@@ -4,7 +4,6 @@ import (
 	"image/color"
 	"math"
 	"sort"
-	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -61,14 +60,9 @@ func linesFromMesh(meshObject *mesh, eng *engine) []fyne.CanvasObject {
 	return lines
 }
 
-// temporary to rotate objectS
-var start int64 = time.Now().UnixMilli()
-
 func linesFromTriangle(tri *triangle, eng *engine) (bool, *triangle) {
-	fTheta := float64(time.Now().UnixMilli()-start) / 1000
-
-	matRotZ := createRotationZMatrix(fTheta)
-	matRotX := createRotationXMatrix(fTheta)
+	matRotZ := createRotationZMatrix(eng.cam.fTheta)
+	matRotX := createRotationXMatrix(eng.cam.fTheta)
 
 	matProj := createProjectionMatrix(eng.cam.fAspectRatio, eng.cam.fFovRad, eng.cam.fFar, eng.cam.fNear)
 
@@ -89,9 +83,9 @@ func linesFromTriangle(tri *triangle, eng *engine) (bool, *triangle) {
 
 	// offset into the screen
 	triTranslated = triRotatedZX
-	triTranslated.p[0].z = triRotatedZX.p[0].z + 15
-	triTranslated.p[1].z = triRotatedZX.p[1].z + 15
-	triTranslated.p[2].z = triRotatedZX.p[2].z + 15
+	triTranslated.p[0].z = triRotatedZX.p[0].z + 12
+	triTranslated.p[1].z = triRotatedZX.p[1].z + 12
+	triTranslated.p[2].z = triRotatedZX.p[2].z + 12
 
 	// use Cross-Product to get surface normal
 	line1 := vec3d{}
